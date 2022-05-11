@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['standard'],
+  extends: ['standard', 'prettier'],
   globals: {
     IS_DEVELOPMENT: 'readonly'
   },
