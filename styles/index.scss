@@ -1,5 +1,23 @@
-$color-white: #fff;
+@import "./utils/variables";
+@import "./utils/functions";
+@import "./utils/mixins";
+@import "./utils/vendors";
+@import "./utils/responsive";
 
-.class {
-    color: $color-white;
-}
+@import "./shared/description";
+@import "./shared/titles";
+
+@import "./base/fonts";
+@import "./base/reset";
+@import "./base/base";
+
+@import "./pages/about/about";
+@import "./pages/about/content";
+@import "./pages/about/gallery";
+@import "./pages/about/highlight";
+
+@import "./pages/collections/collections";
+
+@import "./pages/deatils/details";
+
+@import "./pages/home/home";
