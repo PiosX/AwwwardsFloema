@@ -1,18 +1,19 @@
 .about {
-  background: $color-cadet-blue;
-  color: $color-bright-grey;
+	@extend %page;
+	background: $color-cadet-blue;
+	color: $color-bright-grey;
 }
 .about__wrapper {
 }
 
 .about__title {
-  @extend %title-100;
-  max-width: 124.4rem;
+	@extend %title-100;
+	max-width: 124.4rem;
 
-  margin: 0 auto;
-  text-align: center;
+	margin: 0 auto;
+	text-align: center;
 
-  @include media('<phone') {
-    max-width: 67.7rem;
-  }
+	@include media("<phone") {
+		max-width: 67.7rem;
+	}
 }

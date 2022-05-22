@@ -1,15 +1,27 @@
 import each from "lodash/each";
 
+import Preloader from "components/Preloader";
+
 import About from "pages/About";
 import Collections from "pages/Collections";
-import Detail from "pages/Detail";
 import Home from "pages/Home";
+import Detail from "pages/Detail";
 
 class App {
 	constructor() {
+		this.createPreloader();
 		this.createContent();
 		this.createPages();
+
+		this.addEventListeners();
 		this.addLinkListeners();
+
+		this.update();
+	}
+
+	createPreloader() {
+		this.preloader = new Preloader({});
+		this.preloader.once("completed", this.onPreloaded.bind(this));
 	}
 
 	createContent() {
@@ -21,12 +33,23 @@ class App {
 		this.pages = {
 			about: new About(),
 			collections: new Collections(),
-			detail: new Detail(),
 			home: new Home(),
+			detail: new Detail(),
 		};
 
 		this.page = this.pages[this.template];
 		this.page.create();
+	}
+
+	/*
+	 * Events
+	 */
+
+	onPreloaded() {
+		this.preloader.destroy();
+
+		this.onResize();
+
 		this.page.show();
 	}
 
@@ -47,11 +70,43 @@ class App {
 			this.content.setAttribute("data-template", this.template);
 
 			this.page = this.pages[this.template];
+
 			this.page.create();
+
+			this.onResize();
+
 			this.page.show();
+
+			this.addLinkListeners();
 		} else {
 			console.error(`response status: ${res.status}`);
 		}
+	}
+
+	onResize() {
+		if (this.page && this.page.onResize) {
+			this.page.onResize();
+		}
+	}
+
+	/*
+	 *  LOop
+	 */
+
+	update() {
+		if (this.page && this.page.update) {
+			this.page.update();
+		}
+
+		this.frame = window.requestAnimationFrame(this.update.bind(this));
+	}
+
+	/*
+	 * Listeners
+	 */
+
+	addEventListeners() {
+		window.addEventListener("resize", this.onResize.bind(this));
 	}
 
 	addLinkListeners() {
