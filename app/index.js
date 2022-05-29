@@ -1,8 +1,8 @@
 import each from "lodash/each";
 
+import Canvas from "components/Canvas";
 import Detection from "classes/Detection";
 
-import Canvas from "components/Canvas";
 import Navigation from "components/Navigation";
 import Preloader from "components/Preloader";
 
@@ -71,7 +71,10 @@ class App {
 	}
 
 	onPopState() {
-		this.onChange({ url: window.location.pathname, push: false });
+		this.onChange({
+			url: window.location.pathname,
+			push: false,
+		});
 	}
 
 	async onChange({ url, push = true }) {
@@ -80,13 +83,13 @@ class App {
 		const res = await window.fetch(url);
 		if (res.status === 200) {
 			const html = await res.text();
-
 			const div = document.createElement("div");
-			div.innerHTML = html;
 
 			if (push) {
 				window.history.pushState({}, "", url);
 			}
+
+			div.innerHTML = html;
 
 			const divContent = div.querySelector(".content");
 			this.content.innerHTML = divContent.innerHTML;
@@ -115,8 +118,27 @@ class App {
 		if (this.canvas && this.canvas.onResize) {
 			this.canvas.onResize();
 		}
+
 		if (this.page && this.page.onResize) {
 			this.page.onResize();
+		}
+	}
+
+	onTouchDown(e) {
+		if (this.canvas && this.canvas.onTouchDown) {
+			this.canvas.onTouchDown(e);
+		}
+	}
+
+	onTouchMove(e) {
+		if (this.canvas && this.canvas.onTouchMove) {
+			this.canvas.onTouchMove(e);
+		}
+	}
+
+	onTouchUp(e) {
+		if (this.canvas && this.canvas.onTouchUp) {
+			this.canvas.onTouchUp(e);
 		}
 	}
 
@@ -128,6 +150,7 @@ class App {
 		if (this.canvas && this.canvas.update) {
 			this.canvas.update();
 		}
+
 		if (this.page && this.page.update) {
 			this.page.update();
 		}
@@ -140,7 +163,14 @@ class App {
 	 */
 
 	addEventListeners() {
-		window.addEventListener("popstate", this.onPopState.bind(this));
+		window.addEventListener("mousedown", this.onTouchDown.bind(this));
+		window.addEventListener("mousemove", this.onTouchMove.bind(this));
+		window.addEventListener("mouseup", this.onTouchUp.bind(this));
+
+		window.addEventListener("touchstart", this.onTouchDown.bind(this));
+		window.addEventListener("touchmove", this.onTouchMove.bind(this));
+		window.addEventListener("touchend", this.onTouchUp.bind(this));
+
 		window.addEventListener("resize", this.onResize.bind(this));
 	}
 
